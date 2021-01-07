@@ -17,6 +17,7 @@ pipeline {
         }
         stage('Build') {
             steps {
+                script{
                 //  Building new image
                 sh 'docker image build -t $DOCKER_HUB_REPO:latest .'
                 sh 'docker image tag $DOCKER_HUB_REPO:latest $DOCKER_HUB_REPO:$BUILD_NUMBER'
@@ -29,6 +30,7 @@ pipeline {
                 
                 echo "Image built and pushed to repository"
             }
+        }
         }
         stage('Deploy') {
             steps {
