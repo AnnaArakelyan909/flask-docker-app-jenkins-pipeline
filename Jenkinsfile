@@ -20,12 +20,12 @@ pipeline {
                 script{
                 //  Building new image
                 sh 'docker image build -t $DOCKER_HUB_REPO:latest .'
-                sh 'docker image tag $DOCKER_HUB_REPO:latest $DOCKER_HUB_REPO:docker_app_jenkins'
+                sh 'docker image tag $DOCKER_HUB_REPO:latest $DOCKER_HUB_REPO:$BUILD_NUMBER'
 
                 //  Pushing Image to Repository
                 docker.withRegistry( '', registryCredential ){
-                sh 'docker push talha1995/test:$BUILD_NUMBER'
-                sh 'docker push talha1995/test:latest'
+                sh 'docker push docker_app_jenkins:$BUILD_NUMBER'
+                sh 'docker push docker_app_jenkins:latest'
                 }
                 
                 echo "Image built and pushed to repository"
