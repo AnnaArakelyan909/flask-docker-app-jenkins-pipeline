@@ -20,7 +20,7 @@ pipeline {
                 script{
                 //  Building new image
                 sh 'docker image build -t $DOCKER_HUB_REPO:latest .'
-                sh 'docker image tag $DOCKER_HUB_REPO:latest $DOCKER_HUB_REPO:$BUILD_NUMBER'
+                sh 'docker image tag $DOCKER_HUB_REPO:latest $DOCKER_HUB_REPO:docker_app_jenkins'
 
                 //  Pushing Image to Repository
                 docker.withRegistry( '', registryCredential ){
