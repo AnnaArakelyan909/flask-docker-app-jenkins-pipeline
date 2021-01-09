@@ -23,7 +23,7 @@ pipeline {
                 sh 'docker image tag $DOCKER_HUB_REPO:latest $DOCKER_HUB_REPO:$BUILD_NUMBER'
 
                 //  Pushing Image to Repository
-                docker.withRegistry( '', registryCredential ){
+                docker.withRegistry( '', REGISTRY_CREDENTIAL ){
                 sh 'docker push docker_app_jenkins:$BUILD_NUMBER'
                 sh 'docker push docker_app_jenkins:latest'
                 }
@@ -35,16 +35,14 @@ pipeline {
         stage('Deploy') {
             steps {
                 script{
-                    //sh 'BUILD_NUMBER = ${BUILD_NUMBER}'
-                    if (BUILD_NUMBER == "1") {
-                        sh 'docker run --name $CONTAINER_NAME -d -p 5000:5000 $DOCKER_HUB_REPO'
-                    }
-                    else {
+                    COUNT = sh 'docker ps -a | grep "$CONTAINER_NAME" | wc -l'
+			        if( COUNT != 0 ){
                         sh 'docker stop $CONTAINER_NAME'
                         sh 'docker rm $CONTAINER_NAME'
-                        sh 'docker run --name $CONTAINER_NAME -d -p 5000:5000 $DOCKER_HUB_REPO'
+				        echo "Existing container removed"
                     }
-                    //sh 'echo "Latest image/code deployed"'
+			 //run container
+			 sh 'docker run --name $CONTAINER_NAME -d -p 5000:5000 $DOCKER_HUB_REPO'
                 }
             }
         }
