@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_REPO = "docker_app_jenkins"
+        DOCKER_HUB_REPO = "annaarakeyan/docker_app_jenkins"
         REGISTRY_CREDENTIAL = "dockerhub"
         CONTAINER_NAME = "flask-container"
         STUB_VALUE = "200"
@@ -24,8 +24,8 @@ pipeline {
 
                 //  Pushing Image to Repository
                 docker.withRegistry( '', REGISTRY_CREDENTIAL ){
-                sh 'docker push docker_app_jenkins:$BUILD_NUMBER'
-                sh 'docker push docker_app_jenkins:latest'
+                 sh 'docker push $DOCKER_HUB_REPO:$BUILD_NUMBER'
+		 sh 'docker push $DOCKER_HUB_REPO:latest'
                 }
                 
                 echo "Image built and pushed to repository"
